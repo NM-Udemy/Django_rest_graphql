@@ -1,0 +1,37 @@
+type Query {
+  userQuery: UserType
+  userApiQuery: UserAPIType
+}
+
+type UserType {
+  """名前"""
+  name: String
+
+  """年齢"""
+  age: Int
+  address: Address
+  address_list: [Address]
+}
+
+type Address {
+  city: String
+  isPrimaryAddress: Boolean
+
+  """住所の緯度"""
+  latitude: Float
+
+  """住所の経度"""
+  longitude: Float
+}
+
+type UserAPIType {
+  user(id: Int): User
+  userList: [User]
+}
+
+type User {
+  id: ID
+  name: String
+  email: String
+  address: Address
+}

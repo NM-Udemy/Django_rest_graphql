@@ -1,0 +1,65 @@
+schema {
+  query: Query2
+  mutation: Mutation
+}
+
+type Query2 {
+  questionQuery: Query
+}
+
+type Query {
+  allQuestions: [QuestionType!]
+  allCategories: [CategoryType!]
+  allAnswers(id: Int, content: String): [AnswerType]
+  question(id: Int): QuestionType
+  categoriesFilteredByName(name: String): [CategoryType]
+}
+
+type QuestionType {
+  id: ID!
+  title: String!
+  content: String!
+  category: CategoryType!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  isPublished: Boolean!
+  answers: [AnswerType!]!
+}
+
+type CategoryType {
+  id: ID!
+  name: String!
+  description: String
+}
+
+"""
+The `DateTime` scalar type represents a DateTime
+value as specified by
+[iso8601](https://en.wikipedia.org/wiki/ISO_8601).
+"""
+scalar DateTime
+
+type AnswerType {
+  id: ID!
+  content: String!
+  question: QuestionType!
+  updatedAt: DateTime!
+}
+
+type Mutation {
+  createQuestion(categoryId: Int, content: String, title: String): CreateQuestion
+  updateQuestion(categoryId: Int, content: String, id: ID, title: String): UpdateQuestion
+  deleteQuestion(id: ID): DeleteQuestion
+}
+
+type CreateQuestion {
+  question: QuestionType
+}
+
+type UpdateQuestion {
+  question: QuestionType
+}
+
+type DeleteQuestion {
+  isDeleted: Boolean
+}
