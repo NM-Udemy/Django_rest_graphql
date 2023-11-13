@@ -1,0 +1,65 @@
+<html>
+    <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+        <script>
+            function update_text(pk){
+                var update_value = $("#tweet_" + pk).val();
+                var url = "http://127.0.0.1:8000/api/v1/tweets/" + pk;
+                $.ajax(url,
+                    {
+                        dataType: "json",
+                        type: "PUT",
+                        headers: {
+                            "Authorization": "Token " + localStorage.getItem("api_token")
+                        },
+                        data: {"text": update_value},
+                        xhrFields: {
+                            withCredentials: true
+                        }
+                    }
+                );
+            }
+            function delete_text(pk){
+                var url = "http://127.0.0.1:8000/api/v1/tweets/" + pk;
+                $.ajax(url,
+                    {
+                        dataType: "json",
+                        type: "DELETE",
+                        headers: {
+                            "Authorization": "Token " + localStorage.getItem("api_token")
+                        },
+                        xhrFields: {
+                            withCredentials: true
+                        }
+                    }
+                ).done(function(){
+                    window.location.href = "http://127.0.0.1:8080/user_comment";
+                });
+            }
+            $.ajax({
+                type: "GET",
+                url: "http://127.0.0.1:8000/api/v1/tweets",
+                cache: false,
+                success: function(data){
+                    console.log(data);
+                    for(let i=0; i < data.length;i++){
+                        $("ul").append("<li>"
+                            + "<input type=text id=tweet_"
+                            + data[i].pk
+                            + " value='"
+                            + data[i].text
+                            + "'></input>"
+                            + "<input type=button value='更新' onclick=update_text(" + data[i].pk + ")>"
+                            + "<input type=button value='削除' onclick=delete_text(" + data[i].pk + ")>"
+                            + "</li>");
+                    }
+                }
+            })
+        </script>
+    </head>
+    <body>
+        <ul>
+
+        </ul>
+    </body>
+</html>

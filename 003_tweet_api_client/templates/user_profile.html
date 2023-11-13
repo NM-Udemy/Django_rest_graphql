@@ -1,0 +1,38 @@
+<html>
+    <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+        <script>
+            $(document).ready(function(){
+                is_cached = localStorage.getItem("is_cached");
+                if(is_cached == null){
+                    is_cached = false;
+                }
+                $.ajax({
+                    type: "GET",
+                    url: "http://127.0.0.1:8000/api/v1/user/profile",
+                    cache: is_cached,
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    success: function(response, status, xhr){
+                        // get Cache-Control
+                        var cache_control = xhr.getResponseHeader("Cache-Control");
+                        // public, max-age=3600
+                        console.log(cache_control);
+                        
+                        
+                        for(let key in response){
+                            $("ul").append("<li>" + key + ": " + response[key] + "</li>");
+                        }
+                    }
+                })
+            })
+        </script>
+    </head>
+    <body>
+        <ul>
+
+        </ul>
+        <input type="button" value="キャッシュをクリア" onclick="localStorage.removeItem('is_cached');">
+    </body>
+</html>
